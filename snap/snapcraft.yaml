@@ -1,0 +1,44 @@
+name: ipfixcol2-jamespage
+base: core18
+version: '2.0.0'
+summary: IPFIXcol is a flexible, high-performance IPFIX flow data collector
+description: |
+ IPFIXcol is a flexible, high-performance IPFIX flow data collector
+ designed to be extensible by plugins. The second generation of the
+ collector includes many design and performance enhancements compared
+ to the original IPFIXcol.
+grade: devel
+confinement: strict
+
+apps:
+  ipfixcol2:
+    command: ipfixcol2
+    plugs:
+      - home
+      - network-bind
+      - system-observe
+  ipfixsend2:
+    command: ipfixsend2
+    plugs:
+      - home
+      - network
+      - system-observe
+
+parts:
+  libfds:
+    source: https://github.com/CESNET/libfds.git
+    plugin: cmake
+    build-packages:
+      - g++
+      - libxml2-dev
+  ipfixcol2:
+    source: .
+    plugin: cmake
+    after:
+      - libfds
+    build-packages:
+      - g++
+      - python-docutils
+    stage-packages:
+      - libxml2
+      - libicu60
